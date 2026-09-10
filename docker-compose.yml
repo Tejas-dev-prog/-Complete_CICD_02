@@ -1,7 +1,7 @@
 services:
  
   app:
-    image: devops-cicd-app:1.0
+    image: devops-cicd-app${IMAGE_TAG:-1.0}
     container_name: devops-cicd-app
     restart: unless-stopped
     expose:
