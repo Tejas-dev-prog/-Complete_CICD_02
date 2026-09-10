@@ -1,0 +1,19 @@
+services:
+ 
+  app:
+    image: devops-cicd-app:1.0
+    container_name: devops-cicd-app
+    restart: unless-stopped
+    expose:
+      - "5000"
+ 
+  nginx:
+    image: nginx:alpine
+    container_name: devops-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - app
