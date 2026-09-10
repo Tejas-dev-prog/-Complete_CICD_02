@@ -48,7 +48,7 @@ pipeline {
             steps {
                 sh '''
                     sleep 5
-                    curl --fail http://localhost:5000/health
+                    curl --fail http://devops-cicd-app:5000/health
                 '''
             }
         }
