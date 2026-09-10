@@ -38,34 +38,29 @@ pipeline {
             }
         }
  
-        stage('Deploy') {
-            steps {
-                sh '''
-                    docker rm -f ${CONTAINER_NAME} 2>/dev/null || true
+	stage('Deploy') {
+    		steps {
+        		sh '''
+            		docker rm -f devops-cicd-app || true
+            		docker run -d \
+              		--name devops-cicd-app \
+              		--restart unless-stopped \
+              		--network complete_cicd_02_default \
+              		-p 5000:5000 \
+              		devops-cicd-app:3
+        		'''
+    			}
+		}
  
-                    docker run -d \
-                    --name ${CONTAINER_NAME} \
-                    --restart unless-stopped \
-                    --network ${DOCKER_NETWORK} \
-                    ${IMAGE_NAME}:${IMAGE_TAG}
-                '''
-            }
-        }
- 
-        stage('Health Check') {
-            steps {
-                sh '''
-                    sleep 5
- 
-                    curl --fail \
-                    http://localhost/health
- 
-                    echo ""
-                    echo "Application health check successful"
-                '''
-            }
-        }
-    }
+	stage('Health Check') {
+    		steps {
+        		sh '''
+            		sleep 5
+            		curl --fail http://localhost:5000/health
+        		'''
+    			}
+		}
+
  
     post {
  
