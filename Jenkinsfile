@@ -1,6 +1,11 @@
 pipeline {
     agent any
  
+    environment {
+        IMAGE_NAME = 'devops-cicd-app'
+        IMAGE_TAG = "${BUILD_NUMBER}"
+    }
+ 
     stages {
  
         stage('Checkout') {
@@ -24,7 +29,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 sh '''
-                    docker build -t devops-cicd-app:3 .
+                    docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .
                 '''
             }
         }
@@ -35,11 +40,11 @@ pipeline {
                     docker rm -f devops-cicd-app || true
  
                     docker run -d \
-                        --name devops-cicd-app \
-                        --restart unless-stopped \
-                        --network complete_cicd_02_default \
-                        -p 5000:5000 \
-                        devops-cicd-app:3
+                    --name devops-cicd-app \
+                    --restart unless-stopped \
+                    --network complete_cicd_02_default \
+                    -p 5000:5000 \
+                    ${IMAGE_NAME}:${IMAGE_TAG}
                 '''
             }
         }
@@ -58,6 +63,7 @@ pipeline {
         success {
             echo '========================================='
             echo 'CI/CD PIPELINE SUCCESS'
+            echo "Docker Image: ${IMAGE_NAME}:${IMAGE_TAG}"
             echo '========================================='
         }
  
