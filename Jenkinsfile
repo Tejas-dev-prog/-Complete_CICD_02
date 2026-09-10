@@ -6,7 +6,7 @@ pipeline {
         IMAGE_NAME = "devops-cicd-app"
         IMAGE_TAG = "${BUILD_NUMBER}"
         CONTAINER_NAME = "devops-cicd-app"
-        DOCKER_NETWORK = "Complete_CICD_02_default"
+        DOCKER_NETWORK = "complete_cicd_02_default"
     }
  
     stages {
